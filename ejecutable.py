@@ -5,18 +5,38 @@ def mostrar_ADN(matriz):
         print(" ".join(fila))
     print()
 
+def ingresar_ADN():
+    print("Ingrese el ADN fila por fila (una cadena de 6 bases: A, T, C, G):")
+    matriz = []
+    while len(matriz) < 6:
+        fila = input(f"Fila {len(matriz) + 1}: ").strip().upper()
+        if len(fila) == 6 and all(base in "ATCG" for base in fila):
+            matriz.append(fila)  # Agrega la fila completa como una cadena
+        else:
+            print("Error: La fila debe contener exactamente 6 bases válidas (A, T, C, G).")
+    return matriz, matriz[:]  # Retorna la matriz original y una copia
+
 def main():
-    matriz_ADN_Original = ["AGATCA", "GATTCA", "CAACAT", "GAGCTA", "ATTGCG", "CTGTTC"]
-    matriz_ADN = ["AGATCA", "GATTCA", "CAACAT", "GAGCTA", "ATTGCG", "CTGTTC"]
+    matriz_ADN_Original = []
+    matriz_ADN = []
     mutado = False  # Variable para verificar si se hizo una mutación
 
     print("ADN ACTUAL: ")
     mostrar_ADN(matriz_ADN)
 
     while True:
-        opcion = input("¿Desea detectar mutaciones (D), mutar el ADN (M), sanarlo (S) o salir (X)? ").upper()
+        #Se le pide al usuario que ingrese un adn
+        if not matriz_ADN_Original:
+            print("No hay ADN cargado. Por favor, ingrese uno.")
+            matriz_ADN_Original, matriz_ADN = ingresar_ADN()
+
+
+        opcion = input("¿Desea ingresar un nuevo ADN (I), detectar mutaciones (D), mutar el ADN (M), sanarlo (S) o salir (X)? ").upper()
         
-        if opcion == "D":
+        if opcion == "I":
+            matriz_ADN_Original, matriz_ADN = ingresar_ADN() 
+        
+        elif opcion == "D":
             detector = Detector(matriz_ADN)
             if detector.detectarMutante(matriz_ADN):
                 print("Se ha detectado una mutación en el ADN.")
@@ -78,8 +98,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-#adn = ["AGATCA", "GATTCA", "CAACAT", "GAGCTA", "ATTGCG", "CTGTTC"]
-
-#miadn = Radiacion("A",4,adn,"H",6)
-#print(miadn.crear_semilla_horizontal("A",5))

@@ -10,24 +10,26 @@
 
 El programa implementa un conjunto de funcionalidades para la detección, manipulación y restauración de ADN representado como una matriz de cadenas de texto. Las principales características incluyen:
 
-**Detección de mutaciones**: Permite verificar si el ADN contiene mutaciones horizontales, verticales o diagonales.
-**Mutación del ADN**: Realiza modificaciones en el ADN utilizando dos tipos de mutadores: Radiación y Virus.
+**Ingreso de ADN**: Permite al usuario ingresar una matriz de ADN fila por fila (cada fila es una cadena de 6 bases: A, T, C, G).  
+**Detección de mutaciones**: Verifica si el ADN contiene mutaciones horizontales, verticales o diagonales.  
+**Mutación del ADN**: Realiza modificaciones en el ADN utilizando dos tipos de mutadores: Radiación y Virus.  
 **Sanación del ADN**: Restaura el ADN a su estado original si este ha sido alterado.
 
 ## Instrucciones
 
 El programa presenta un menú interactivo que permite al usuario elegir entre las siguientes opciones:
 
-**Detectar mutaciones (D)**: Determina si el ADN tiene mutaciones.
-**Mutar el ADN (M)**:
-    Solicita la base nitrogenada (A, T, C, G).
-    Permite elegir entre mutaciones por Radiación (horizontales o verticales) o Virus (diagonales).
-**Sanar el ADN (S)**: Si el ADN fue mutado, lo restaura a su versión inicial.
-**Salir (X)**: Termina el programa.
+1. **Ingresar un nuevo ADN (I)**: Permite cargar una nueva matriz de ADN ingresando fila por fila. Cada fila debe tener exactamente 6 bases nitrogenadas válidas (A, T, C, G).  
+2. **Detectar mutaciones (D)**: Determina si el ADN tiene mutaciones.  
+3. **Mutar el ADN (M)**:  
+   - Solicita la base nitrogenada (A, T, C, G).  
+   - Permite elegir entre mutaciones por Radiación (horizontales o verticales) o Virus (diagonales).  
+4. **Sanar el ADN (S)**: Si el ADN fue mutado, lo restaura a su versión inicial.  
+5. **Salir (X)**: Termina el programa.
 
 ## Caso de ejemplo
 
-Ejemplo de ADN inicial
+Ejemplo de ADN inicial:  
 El ADN se representa como una matriz de cadenas de texto:
 
 AGATCA
@@ -37,12 +39,14 @@ GAGCTA
 ATTGCG
 CTGTTC
 
+
 El programa le pedirá al usuario que ingrese una de las siguientes opciones:
 
-1. Detectar mutaciones (D): Detecta si hay mutaciones horizontales, verticales o diagonales.
-2. Mutar el ADN (M): Se solicita al usuario la base nitrogenada para realizar la mutación (A, T, C, G) y el tipo de   mutador (Radiación o Virus).
-3. Sanar el ADN (S): Si el ADN ha sido mutado, se restaurará a su versión original.
-4. Salir (X): Sale del programa.
+1. Ingresar un nuevo ADN (I): Carga una nueva matriz fila por fila.
+2. Detectar mutaciones (D): Detecta si hay mutaciones horizontales, verticales o diagonales.
+3. Mutar el ADN (M): Solicita al usuario la base nitrogenada para realizar la mutación (A, T, C, G) y el tipo de mutador (Radiación o Virus).
+4. Sanar el ADN (S): Si el ADN ha sido mutado, se restaurará a su versión original.
+5. Salir (X): Sale del programa.
 
 ## Ejemplo de ejecución:
 
@@ -54,11 +58,36 @@ GAGCTA
 ATTGCG
 CTGTTC
 
-Detección de mutaciones
+## Ingreso de ADN
+
+Entrada:
+
+I
+Fila 1: AGATCA
+Fila 2: GATTCA
+Fila 3: CAACAT
+Fila 4: GAGCTA
+Fila 5: ATTGCG
+Fila 6: CTGTTC
+
+Salida:
+
+ADN ingresado con éxito:
+AGATCA
+GATTCA
+CAACAT
+GAGCTA
+ATTGCG
+CTGTTC
+
+
+## Detección de mutaciones
+
 Entrada: D
+
 Salida: "No se ha detectado ninguna mutación en el ADN."
 
-Mutación del ADN
+## Mutación del ADN
 
 Entrada:
 
@@ -77,7 +106,8 @@ GAGCTA
 ATTGCG
 CTGTTC
 
-Sanación del ADN
+## Sanación del ADN
+
 Entrada: S
 Salida:
 
@@ -90,17 +120,17 @@ ATTGCG
 CTGTTC
 
 Clases principales
-Detector
-Contiene métodos para detectar mutaciones en las tres direcciones (horizontal, vertical y diagonal).
+- Detector
+    Contiene métodos para detectar mutaciones en las tres direcciones (horizontal, vertical y diagonal).
 
-Radiación
-Clase hija de Mutador que realiza mutaciones horizontales o verticales.
+- Radiación
+    Clase hija de Mutador que realiza mutaciones horizontales o verticales.
 
-Virus
-Clase hija de Mutador que realiza mutaciones diagonales.
+- Virus
+    Clase hija de Mutador que realiza mutaciones diagonales.
 
-Sanador
-Clase responsable de restaurar el ADN a su estado original si este ha sido alterado.
+- Sanador
+    Clase responsable de restaurar el ADN a su estado original si este ha sido alterado.
 
 ## Output esperado
 
