@@ -125,7 +125,7 @@ class Mutador:
         self.base_nitrogenada = base_nitrogenada
         self.cantidad_repetida = cantidad_repedida
         self.adn = adn
-        self.indice = indice;
+        self.indice = indice
 
 
     def crear_mutante(self):
@@ -165,18 +165,13 @@ class Radiacion(Mutador):
             raise IndexError("El índice ind está fuera de rango")
 
         try:
-            fila = list(miAdn[ind])
-            contador = 0
+            fila = list(miAdn[ind])  # Convertimos la fila en una lista mutable
             cantidad = self.cantidad_repetida
 
-            for i in range(len(miAdn)):
-                for j in range(i):
-                    contador += 1
-                    if contador <= cantidad:
-                        fila[i] = base
-                    else:
-                        fila = "".join(fila)
-            miAdn[ind] = fila
+            for i in range(min(cantidad, len(fila))):  # Modificamos hasta `cantidad` elementos
+                fila[i] = base
+
+            miAdn[ind] = "".join(fila)  # Convertimos de nuevo la lista a string
             return miAdn
         except IndexError as e:
             print(f"Se ha producido un error de índice: {e}")
@@ -193,21 +188,20 @@ class Radiacion(Mutador):
         if ind < 0 or ind >= len(miAdn[0]):
             raise IndexError("El índice ind está fuera de rango")
         try:
-                for i in range(len(miAdn)):
-                    secuencia = list(miAdn[i])
-                    for j in range(cantidad):
-                        secuencia[ind] = base
-                    miAdn[i] = "".join(secuencia)
-                return miAdn
+            for i in range(min(cantidad, len(miAdn))):  # Modificamos hasta `cantidad` filas
+                fila = list(miAdn[i])  # Convertimos la fila en una lista mutable
+                fila[ind] = base  # Cambiamos el carácter en la posición de la columna
+                miAdn[i] = "".join(fila)  # Convertimos de nuevo la lista a string
+            return miAdn
         except IndexError:
             print("Se ha producido un error de índice. Verifica los datos de entrada.")
 
     def crear_mutante(self, base_nitrogenada, posicion_inicial):
         ori = self.orientacion
         if ori == 'H':
-            return self.crear_semilla_horizontal(base_nitrogenada, posicion_inicial)
+            return self.crear_semilla_horizontal(base_nitrogenada, posicion_inicial-1)
         elif ori == 'V':
-            return self.crear_semilla_vertical(base_nitrogenada, posicion_inicial)
+            return self.crear_semilla_vertical(base_nitrogenada, posicion_inicial-1)
 
 """"**Clase Virus
  Clase hija de Mutador. Los virus solo crean mutantes diagonales.Esta clase debe contener:
@@ -229,7 +223,6 @@ class Virus(Mutador):
 
     def crear_semilla_diagonal(self, base):
         miAdn = self.adn
-        contador = 0
         cantidad = self.cantidad_repetida
 
         if not isinstance(miAdn, list):
@@ -266,26 +259,18 @@ Debe contener:
 import random
 
 class Sanador:
-    def __init__(self, eficiencia=0.8):
-        self.eficiencia = eficiencia  # Probabilidad de sanación
+    def __init__(self, adn_original):
+        # Guarda una referencia del ADN original para poder restaurarlo
+        self.adn_original = adn_original
 
-    def sanar_mutantes(self, adn, detectar_mutante):
-        if detectar_mutante(adn):
-            if random.random() <= self.eficiencia:
-                # Generar un ADN completamente nuevo sin mutaciones
-                n = len(adn)
-                nuevo_adn = []
-                for base in range(n):
-                    fila = []
-                    for base in range(n):
-                        fila.append(random.choice(['A', 'T', 'C', 'G']))
-                    nuevo_adn.append(fila)
-                return nuevo_adn
-            else:
-                print("No es posible sanarlo.")
-        else:
-            print("No se han detectado mutaciones.")
-        return adn  # Retorna el ADN original si no se ha sanado o si no había mutaciones
+    def sanar_mutantes(self, matriz):
+        # Restaura las bases que difieren de las originales
+        for i in range(len(matriz)):
+            matriz[i] = "".join(
+                self.adn_original[i][j] if matriz[i][j] != self.adn_original[i][j] else matriz[i][j]
+                for j in range(len(matriz[i]))
+            )
+        return matriz
 
 
 
