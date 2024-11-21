@@ -1,3 +1,5 @@
+import random
+
 class Detector:
     adn = []
     def __init__(self, adn):
@@ -256,26 +258,29 @@ Debe contener:
   - Método sanar_mutantes, encargado de sanar cualquier tipo de mutación. Éste debe tener como argumento la matriz de ADN, revisar si existen mutaciones y, si las hay, generar aleatoriamente un ADN completamente nuevo que **no** tenga mutaciones y retornarlo. Consejo: esta clase va a necesitar el método detectar_mutante, que ya lo han definido en otra clase!
 """
 
-import random
-
 class Sanador:
-    def __init__(self, adn_original):
-        # Guarda una referencia del ADN original para poder restaurarlo
-        self.adn_original = adn_original
+    def __init__(self, ADN:list):
+        try:
+            self.bases_nitrogenadas = ["A","C","G","T"]
+            self.ADN = ADN
+            self.detectar_mutantes(self.ADN)
+            self.sanar_mutantes(self.ADN)
+        except Exception:
+            pass
 
-    def sanar_mutantes(self, matriz):
-        # Restaura las bases que difieren de las originales
-        for i in range(len(matriz)):
-            matriz[i] = "".join(
-                self.adn_original[i][j] if matriz[i][j] != self.adn_original[i][j] else matriz[i][j]
-                for j in range(len(matriz[i]))
-            )
-        return matriz
-
-
-
-
-
-
-
-
+    def detectar_mutantes(self, ADN:list):
+        detector = Detector(ADN)
+        return True if detector.detectarMutante(ADN) == True else False
+    
+    def sanar_mutantes(self,ADN:list):
+        if self.detectar_mutantes(ADN) == True:
+            while self.detectar_mutantes(ADN) == True:
+                for i in range(0, 6):
+                    palabra = list(ADN[i])
+                    for j in range(len(palabra)):
+                        palabra[j] = random.choice(self.bases_nitrogenadas)
+                    palabra = ''.join(palabra)
+                    ADN[i] = palabra
+                self.ADN = ADN
+                self.detectar_mutantes(ADN)
+        return self.ADN

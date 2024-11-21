@@ -11,30 +11,39 @@ def ingresar_ADN():
     while len(matriz) < 6:
         fila = input(f"Fila {len(matriz) + 1}: ").strip().upper()
         if len(fila) == 6 and all(base in "ATCG" for base in fila):
-            matriz.append(fila)  # Agrega la fila completa como una cadena
+            matriz.append(list(fila))  # Guardar como lista de caracteres para mutabilidad
         else:
             print("Error: La fila debe contener exactamente 6 bases válidas (A, T, C, G).")
-    return matriz, matriz[:]  # Retorna la matriz original y una copia
+    
+    detector = Detector(matriz)
+    es_mutante = detector.detectarMutante(matriz)
+    if es_mutante:
+        print("--------------------------------")
+        print("El ADN ingresado tiene mutaciones. Procediendo a sanarlo...")
+        sanador = Sanador(matriz)
+        matriz = sanador.sanar_mutantes(matriz)
+        print("ADN sanado correctamente.")
+    return matriz
+
+
 
 def main():
-    matriz_ADN_Original = []
     matriz_ADN = []
-    mutado = False  # Variable para verificar si se hizo una mutación
-
-    print("ADN ACTUAL: ")
-    mostrar_ADN(matriz_ADN)
 
     while True:
-        #Se le pide al usuario que ingrese un adn
-        if not matriz_ADN_Original:
+        # Se le pide al usuario que ingrese un ADN si no hay uno cargado
+        if not matriz_ADN:
             print("No hay ADN cargado. Por favor, ingrese uno.")
-            matriz_ADN_Original, matriz_ADN = ingresar_ADN()
-
-
+            matriz_ADN = ingresar_ADN()
+        
+        print("--------------------------------")
+        print("ADN ACTUAL:")
+        mostrar_ADN(matriz_ADN)    
+        
         opcion = input("¿Desea ingresar un nuevo ADN (I), detectar mutaciones (D), mutar el ADN (M), sanarlo (S) o salir (X)? ").upper()
         
         if opcion == "I":
-            matriz_ADN_Original, matriz_ADN = ingresar_ADN() 
+            matriz_ADN = ingresar_ADN()
         
         elif opcion == "D":
             detector = Detector(matriz_ADN)
@@ -65,14 +74,14 @@ def main():
                     print(f"Error: {e}. Intente nuevamente.")
             
             if tipo_mutador == "R":
-                indRadiacion = int(input("Ingrese el indice para la mutación:"))
+                indRadiacion = int(input("Ingrese el índice para la mutación: "))
                 orientacion = input("¿Horizontal (H) o Vertical (V)? ").upper()
-                mutador = Radiacion(base,cantidadRepetida,matriz_ADN,orientacion,indRadiacion)
+                mutador = Radiacion(base, cantidadRepetida, matriz_ADN, orientacion, indRadiacion)
                 matriz_ADN = mutador.crear_mutante(base, indRadiacion)
             
             elif tipo_mutador == "V":
-                indVirus =  int(input("Ingrese le indice para la mutacion"))
-                mutador = Virus(base,cantidadRepetida,matriz_ADN,indVirus)
+                indVirus = int(input("Ingrese el índice para la mutación: "))
+                mutador = Virus(base, cantidadRepetida, matriz_ADN, indVirus)
                 matriz_ADN = mutador.crear_mutante(base)
             
             mutado = True  # Cambia el valor ya que se ha realizado una mutación
@@ -80,14 +89,11 @@ def main():
             mostrar_ADN(matriz_ADN)
         
         elif opcion == "S":
-            if mutado:
-                sanador = Sanador(matriz_ADN_Original)
-                matriz_ADN = sanador.sanar_mutantes(matriz_ADN)
-                print("ADN después de sanar:")
-                mostrar_ADN(matriz_ADN)
-                mutado = False  # Resetea el valor después de sanar
-            else:
-                print("No se ha realizado ninguna mutación para sanar.")
+            sanador = Sanador(matriz_ADN)  # Usamos el nuevo Sanador sin depender de ADN original
+            matriz_ADN = sanador.sanar_mutantes(matriz_ADN)
+            print("ADN después de sanar:")
+            mostrar_ADN(matriz_ADN)
+            mutado = False  # Resetea el valor después de sanar
         
         elif opcion == "X":
             print("Saliendo del programa.")
